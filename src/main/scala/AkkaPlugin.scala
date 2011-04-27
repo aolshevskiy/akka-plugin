@@ -6,7 +6,7 @@ object AkkaPlugin extends Plugin {
 	lazy val Akka_Repository = MavenRepository("Akka Repository", "http://akka.io/repository")
 	lazy val Sun_JDMK_Repo = MavenRepository("Sun JDMK Repo", "http://wp5.e-taxonomy.eu/cdmlib/mavenrepo")
 	lazy val JBoss_Repo = MavenRepository("JBoss Repo", "http://repository.jboss.org/nexus/content/groups/public/")
-	lazy val Scala_Tools_Repo = MavenRepository("Scala-Tools Repo", "http://scala-tools.org/repo-releases")
+	lazy val java_net_Repo = MavenRepository("java.net Repo", "http://download.java.net/maven/2")
 	lazy val GuiceyFruit_Repo = MavenRepository("GuiceyFruit Repo", "http://guiceyfruit.googlecode.com/svn/repo/releases/")
 	lazy val Codehaus_Repo = MavenRepository("Codehaus Repo", "http://repository.codehaus.org")
 
@@ -27,13 +27,13 @@ object AkkaPlugin extends Plugin {
 			ScalaToolsSnapshots,
 			Sun_JDMK_Repo,
 			JBoss_Repo,
-			JavaNet1Repository,
+			java_net_Repo,
 			GuiceyFruit_Repo,
 			Codehaus_Repo
 		),
 		moduleConfigurations ++= Seq(
 			ModuleConfiguration("org.scannotation", "*", "*", JBoss_Repo),
-			ModuleConfiguration("com.sun.jersey.contribs", "*", "*", JavaNet1Repository),
+			ModuleConfiguration("com.sun.jersey.contribs", "*", "*", java_net_Repo),
 			ModuleConfiguration("org.multiverse", "*", "*", Codehaus_Repo),
 			ModuleConfiguration("org.jboss", "*", "*", JBoss_Repo),
 			ModuleConfiguration("org.eclipse.jetty", "*", "*", DefaultMavenRepository),
@@ -41,7 +41,7 @@ object AkkaPlugin extends Plugin {
 			ModuleConfiguration("com.rabbitmq", "rabbitmq-client", "0.9.1", Akka_Repository),
 			ModuleConfiguration("net.debasishg", "*", "*", ScalaToolsReleases),
 			ModuleConfiguration("org.scala-tools.testing", "scalacheck_2.9.0.RC1", "1.9-SNAPSHOT", ScalaToolsSnapshots),
-			ModuleConfiguration("com.sun.jersey", "*", "*", JavaNet1Repository),
+			ModuleConfiguration("com.sun.jersey", "*", "*", java_net_Repo),
 			ModuleConfiguration("com.atomikos", "*", "*", DefaultMavenRepository),
 			ModuleConfiguration("org.scala-tools", "time", "*", ScalaToolsReleases),
 			ModuleConfiguration("args4j", "*", "*", JBoss_Repo),
