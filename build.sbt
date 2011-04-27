@@ -8,4 +8,4 @@ organization := "com.github.siasia"
 
 name := "akka-plugin"
 
-version := "0.1-SNAPSHOT"
+version := "1.0"

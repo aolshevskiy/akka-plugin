@@ -3,64 +3,82 @@ import sbt._
 import Keys._
 
 object AkkaPlugin extends Plugin {
-  lazy val Akka_Repository = MavenRepository("Akka Repository", "http://akka.io/repository")
-  lazy val Sun_JDMK_Repo = MavenRepository("Sun JDMK Repo", "http://wp5.e-taxonomy.eu/cdmlib/mavenrepo")
-  lazy val JBoss_Repo = MavenRepository("JBoss Repo", "http://repository.jboss.org/nexus/content/groups/public/")
-  lazy val Scala_Tools_Repo = MavenRepository("Scala-Tools Repo", "http://scala-tools.org/repo-releases")
-  lazy val GuiceyFruit_Repo = MavenRepository("GuiceyFruit Repo", "http://guiceyfruit.googlecode.com/svn/repo/releases/")
-  lazy val Codehaus_Repo = MavenRepository("Codehaus Repo", "http://repository.codehaus.org")
+	val AkkaRepo             = MavenRepository("Akka Repository", "http://akka.io/repository")
+	val ClojarsRepo          = MavenRepository("Clojars Repo", "http://clojars.org/repo")
+	val CodehausRepo         = MavenRepository("Codehaus Repo", "http://repository.codehaus.org")
+	val GuiceyFruitRepo      = MavenRepository("GuiceyFruit Repo", "http://guiceyfruit.googlecode.com/svn/repo/releases/")
+	val JBossRepo            = MavenRepository("JBoss Repo", "http://repository.jboss.org/nexus/content/groups/public/")
+	val JavaNetRepo          = MavenRepository("java.net Repo", "http://download.java.net/maven/2")
+	val MsgPackRepo          = MavenRepository("Message Pack Releases Repo","http://msgpack.sourceforge.net/maven2/")
+	val SonatypeSnapshotRepo = MavenRepository("Sonatype OSS Repo", "http://oss.sonatype.org/content/repositories/releases")
+	val SunJDMKRepo          = MavenRepository("Sun JDMK Repo", "http://wp5.e-taxonomy.eu/cdmlib/mavenrepo")
+	val TerrastoreRepo       = MavenRepository("Terrastore Releases Repo", "http://m2.terrastore.googlecode.com/hg/repo")
+	val ZookeeperRepo        = MavenRepository("Zookeeper Repo", "http://lilycms.org/maven/maven2/deploy/")
 
-  val akkaVersion = SettingKey[String]("akka-version")
-  val akkaModulesVersion = SettingKey[String]("akka-modules-version")
-  val akkaModules = SettingKey[Seq[String]]("akka-modules")
+	val akkaVersion = SettingKey[String]("akka-version")
+	val akkaModules = SettingKey[Seq[String]]("akka-modules")
 
-  def akkaModule(version: String, moduleVersion: String)(module: String) = "se.scalablesolutions.akka" % ("akka-" + module) % {
-    if (Set("scalaz", "camel", "dispatcher-extras", "osgi", "samples", "kernel", "spring", "camel-typed", "amqp").contains(module))
-      moduleVersion
-    else
-      version
-  }
-  
-  val akkaSettings = Seq(
-    resolvers ++= Seq(
-      Akka_Repository,
-      ScalaToolsSnapshots,
-      Sun_JDMK_Repo,
-      JBoss_Repo,
-      JavaNet1Repository,
-      GuiceyFruit_Repo,
-      Codehaus_Repo
-    ),
-    moduleConfigurations ++= Seq(
-      ModuleConfiguration("org.scannotation", "*", "*", JBoss_Repo),
-      ModuleConfiguration("com.sun.jersey.contribs", "*", "*", JavaNet1Repository),
-      ModuleConfiguration("org.multiverse", "*", "*", Codehaus_Repo),
-      ModuleConfiguration("org.jboss", "*", "*", JBoss_Repo),
-      ModuleConfiguration("org.eclipse.jetty", "*", "*", DefaultMavenRepository),
-      ModuleConfiguration("javax.jms", "*", "*", Sun_JDMK_Repo),
-      ModuleConfiguration("com.rabbitmq", "rabbitmq-client", "0.9.1", Akka_Repository),
-      ModuleConfiguration("net.debasishg", "*", "*", ScalaToolsReleases),
-      ModuleConfiguration("org.scala-tools.testing", "scalacheck_2.9.0.RC1", "1.9-SNAPSHOT", ScalaToolsSnapshots),
-      ModuleConfiguration("com.sun.jersey", "*", "*", JavaNet1Repository),
-      ModuleConfiguration("com.atomikos", "*", "*", DefaultMavenRepository),
-      ModuleConfiguration("org.scala-tools", "time", "*", ScalaToolsReleases),
-      ModuleConfiguration("args4j", "*", "*", JBoss_Repo),
-      ModuleConfiguration("org.scalatest", "scalatest", "1.4-SNAPSHOT", ScalaToolsSnapshots),
-      ModuleConfiguration("voldemort.store.compress", "h2-lzf", "*", Akka_Repository),
-      ModuleConfiguration("org.guiceyfruit", "*", "*", GuiceyFruit_Repo),
-      ModuleConfiguration("com.sun.jmx", "*", "*", Sun_JDMK_Repo),
-      ModuleConfiguration("com.sun.jdmk", "*", "*", Sun_JDMK_Repo),
-      ModuleConfiguration("org.codehaus.aspectwerkz", "aspectwerkz", "2.2.3", Akka_Repository),
-      ModuleConfiguration("org.scalaz", "*", "*", ScalaToolsSnapshots),
-      ModuleConfiguration("org.jboss.netty", "*", "*", JBoss_Repo)
-    ),
-    akkaVersion := "1.0",
-    akkaModulesVersion <<= akkaVersion(v => v),
-    akkaModules := Seq("actor"),
-    libraryDependencies <<= (libraryDependencies, akkaModules, akkaVersion, akkaModulesVersion) {
-      (deps, modules, version, moduleVersion) =>
-      deps ++
-      modules.map(akkaModule(version, moduleVersion))
-    }
-  )
+	def akkaModule(version: String)(module: String) = "se.scalablesolutions.akka" % ("akka-" + module) % version
+
+	val akkaSettings = Seq(
+		resolvers ++= Seq(
+			AkkaRepo,
+			ClojarsRepo,
+			CodehausRepo,
+			GuiceyFruitRepo,
+			JBossRepo,
+			JavaNetRepo,
+			MsgPackRepo,
+			SonatypeSnapshotRepo,
+			SunJDMKRepo,
+			TerrastoreRepo,
+			ZookeeperRepo
+		),
+		moduleConfigurations ++= Seq(
+			ModuleConfiguration("se.scalablesolutions.akka", AkkaRepo),
+			ModuleConfiguration("org.codehaus.aspectwerkz", AkkaRepo),
+			ModuleConfiguration("org.apache.cassandra", AkkaRepo),
+			ModuleConfiguration("com.eaio", AkkaRepo),
+			ModuleConfiguration("com.facebook", AkkaRepo),
+			ModuleConfiguration("voldemort.store.compress", AkkaRepo),
+			ModuleConfiguration("org.apache.hbase", AkkaRepo),
+			ModuleConfiguration("jsr166x", AkkaRepo),
+			ModuleConfiguration("spy", "memcached", AkkaRepo),
+			ModuleConfiguration("net.lag", AkkaRepo),
+			ModuleConfiguration("com.redis", AkkaRepo),
+			ModuleConfiguration("sbinary", AkkaRepo),
+			ModuleConfiguration("sjson.json", AkkaRepo),
+			ModuleConfiguration("com.trifork", AkkaRepo),
+			ModuleConfiguration("org.scala-tools", "vscaladoc", "1.1-md-3", AkkaRepo),
+			ModuleConfiguration("args4j", JBossRepo),
+			ModuleConfiguration("org.atmosphere", SonatypeSnapshotRepo),
+			ModuleConfiguration("com.mongodb.casbah", ScalaToolsReleases),
+			ModuleConfiguration("com.sun.grizzly", JavaNetRepo),
+			ModuleConfiguration("org.guiceyfruit", GuiceyFruitRepo),
+			ModuleConfiguration("org.jboss", JBossRepo),
+			ModuleConfiguration("com.sun.jdmk", SunJDMKRepo),
+			ModuleConfiguration("javax.jms", SunJDMKRepo),
+			ModuleConfiguration("com.sun.jmx", SunJDMKRepo),
+			ModuleConfiguration("com.sun.jersey.contribs", JavaNetRepo),
+			ModuleConfiguration("com.sun.jersey", JavaNetRepo),
+			ModuleConfiguration("jgroups", JBossRepo),
+			ModuleConfiguration("jsr166y", TerrastoreRepo),
+			ModuleConfiguration("org.msgpack", MsgPackRepo),
+			ModuleConfiguration("org.multiverse", CodehausRepo),
+			ModuleConfiguration("org.jboss.netty", JBossRepo),
+			ModuleConfiguration("org.jboss.resteasy", JBossRepo),
+			ModuleConfiguration("org.scannotation", JBossRepo),
+			ModuleConfiguration("terrastore", TerrastoreRepo),
+			ModuleConfiguration("org.scala-tools", "time", ScalaToolsReleases),
+			ModuleConfiguration("voldemort", ClojarsRepo),
+			ModuleConfiguration("org.apache.hadoop.zookeeper", ZookeeperRepo)
+		),
+		akkaVersion := "1.0",
+		akkaModules := Seq("actor"),
+		libraryDependencies <<= (libraryDependencies, akkaModules, akkaVersion) {
+			(deps, modules, version) =>
+				deps ++
+			modules.map(akkaModule(version))
+		}
+	)
 }
